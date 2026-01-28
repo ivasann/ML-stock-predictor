@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Analytics Suite | Invest in Data, The Smart Way</title>
+    <meta name="description"
+        content="AI-powered stock prediction, sales forecasting, and customer analytics for Indian markets">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="8" height="30" x="2" y="5" fill="#000" />
+                    <rect width="8" height="20" x="16" y="15" fill="#000" />
+                    <rect width="8" height="25" x="30" y="10" fill="#000" />
+                </svg>
+            </a>
+            <div class="nav-links">
+                <a href="#" class="nav-link active">HOME</a>
+                <a href="#stock" class="nav-link">MARKET ACTIVITY</a>
+                <a href="#sales" class="nav-link">NEWS & INSIGHT</a>
+                <a href="#churn" class="nav-link">SOLUTIONS</a>
+                <a href="#" class="nav-link">ABOUT US</a>
+            </div>
+            <div class="nav-actions">
+                <button class="search-btn">
+                    SEARCH <span class="search-icon">🔍</span>
+                </button>
+                <a href="#" class="btn-outline">LOGIN</a>
+                <a href="#" class="btn-primary">SIGN UP</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-left">
+                <div class="hero-title-group">
+                    <h1 class="hero-title">
+                        <span class="title-line">INVEST IN</span>
+                        <span class="sparkle sparkle-1">✦</span>
+                        <a href="#" class="hero-tag">TALK ABOUT FUTURE GROWTH</a>
+                    </h1>
+                    <h1 class="hero-title-large">
+                        <span class="sparkle sparkle-2">✦</span>
+                        STOCKS THE
+                        <br>SMART WAY
+                    </h1>
+                </div>
+                <a href="#stock" class="btn-cta">
+                    START INVEST NOW
+                </a>
+                <span class="sparkle sparkle-3">✦</span>
+            </div>
+            <div class="hero-right">
+                <!-- Floating Cards -->
+                <div class="floating-cards">
+                    <div class="stat-card card-1">
+                        <div class="confidence-badge">
+                            <span class="badge-icon">📊</span>
+                            <span>100%</span>
+                            <span class="badge-label">Confidence</span>
+                        </div>
+                    </div>
+                    <div class="stat-card card-2">
+                        <span class="stat-label">Saving</span>
+                        <span class="stat-value green">+10.33%</span>
+                        <span class="stat-sub">+0.40%</span>
+                    </div>
+                    <div class="stat-card card-3">
+                        <span class="stat-label">Saving</span>
+                        <span class="stat-value green">+760.40%</span>
+                        <span class="stat-sub pink">+2.40%</span>
+                    </div>
+                    <div class="portfolio-card">
+                        <div class="portfolio-header">
+                            <span class="portfolio-icon">📈</span>
+                            <span class="portfolio-label">Saving</span>
+                        </div>
+                        <div class="portfolio-title">Your Portfolio</div>
+                        <div class="portfolio-value">₹2,420.64</div>
+                        <div class="portfolio-change">+4.56%</div>
+                        <div class="portfolio-targets">
+                            <span class="target-label">Analysis price target:</span>
+                            <div class="target-row">
+                                <div class="target-item">
+                                    <span class="target-value">₹520.45</span>
+                                    <span class="target-sub">Average price target</span>
+                                </div>
+                                <div class="target-item">
+                                    <span class="target-value">₹520.45</span>
+                                    <span class="target-sub">Average price target</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Arrows -->
+        <button class="nav-arrow nav-prev">←</button>
+        <button class="nav-arrow nav-next">→</button>
+    </header>
+
+    <!-- Market Activity Section -->
+    <section class="market-section" id="stock">
+        <div class="section-header">
+            <h2 class="section-title">Top Stock In The Market <span class="close-timer">(Close Soon 1H 15M)</span></h2>
+            <a href="#" class="view-link">VIEW MARKET ACTIVITY ↗</a>
+        </div>
+        <div class="stock-cards">
+            <div class="stock-card" data-stock="SUBEX">
+                <div class="stock-name">SUBEX</div>
+                <div class="stock-price">87.45</div>
+                <div class="stock-change positive">+2.35 (2.76%)</div>
+                <div class="mini-chart">
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 45%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 75%"></div>
+                    <div class="bar" style="height: 85%"></div>
+                    <div class="bar" style="height: 90%"></div>
+                </div>
+            </div>
+            <div class="stock-card" data-stock="TCS">
+                <div class="stock-name">TCS</div>
+                <div class="stock-price">4125.80</div>
+                <div class="stock-change negative">-28.45 (0.68%)</div>
+                <div class="mini-chart red">
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 45%"></div>
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 35%"></div>
+                    <div class="bar" style="height: 30%"></div>
+                </div>
+            </div>
+            <div class="stock-card" data-stock="INFY">
+                <div class="stock-name">INFOSYS</div>
+                <div class="stock-price">1842.55</div>
+                <div class="stock-change positive">+15.20 (0.83%)</div>
+                <div class="mini-chart">
+                    <div class="bar" style="height: 30%"></div>
+                    <div class="bar" style="height: 45%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 75%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 85%"></div>
+                </div>
+            </div>
+            <div class="stock-card" data-stock="RELIANCE">
+                <div class="stock-name">RELIANCE</div>
+                <div class="stock-price">2945.60</div>
+                <div class="stock-change positive">+18.90 (0.65%)</div>
+                <div class="mini-chart">
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 52%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 68%"></div>
+                    <div class="bar" style="height: 75%"></div>
+                    <div class="bar" style="height: 78%"></div>
+                    <div class="bar" style="height: 82%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live News Section - Twitch Style -->
+    <section class="news-section" id="news">
+        <div class="section-header">
+            <h2 class="section-title">Live Market Feed <span class="badge-live"><span class="live-dot"></span>
+                    LIVE</span></h2>
+            <div class="viewer-count">
+                <span class="viewer-icon">👁️</span>
+                <span id="viewer-count">2,847</span> watching
+            </div>
+        </div>
+
+        <div class="live-feed-container">
+            <!-- Stock Tickers - Live Updating -->
+            <div class="live-stocks-panel">
+                <div class="panel-header">
+                    <span class="panel-title">📊 Live Prices</span>
+                    <span class="update-indicator">
+                        <span class="pulse-dot"></span>
+                        Auto-updating
+                    </span>
+                </div>
+                <div class="live-stock-list" id="live-stocks">
+                    <div class="live-stock-item" data-stock="SUBEX">
+                        <div class="stock-info">
+                            <span class="stock-symbol">SUBEX</span>
+                            <span class="stock-company">Subex Limited</span>
+                        </div>
+                        <div class="stock-data">
+                            <span class="stock-price" id="price-SUBEX">₹87.45</span>
+                            <span class="stock-change positive" id="change-SUBEX">+2.76%</span>
+                        </div>
+                        <div class="stock-flash" id="flash-SUBEX"></div>
+                    </div>
+                    <div class="live-stock-item" data-stock="TCS">
+                        <div class="stock-info">
+                            <span class="stock-symbol">TCS</span>
+                            <span class="stock-company">Tata Consultancy</span>
+                        </div>
+                        <div class="stock-data">
+                            <span class="stock-price" id="price-TCS">₹4,125.80</span>
+                            <span class="stock-change negative" id="change-TCS">-0.68%</span>
+                        </div>
+                        <div class="stock-flash" id="flash-TCS"></div>
+                    </div>
+                    <div class="live-stock-item" data-stock="INFY">
+                        <div class="stock-info">
+                            <span class="stock-symbol">INFY</span>
+                            <span class="stock-company">Infosys</span>
+                        </div>
+                        <div class="stock-data">
+                            <span class="stock-price" id="price-INFY">₹1,842.55</span>
+                            <span class="stock-change positive" id="change-INFY">+0.83%</span>
+                        </div>
+                        <div class="stock-flash" id="flash-INFY"></div>
+                    </div>
+                    <div class="live-stock-item" data-stock="RELIANCE">
+                        <div class="stock-info">
+                            <span class="stock-symbol">RELIANCE</span>
+                            <span class="stock-company">Reliance Industries</span>
+                        </div>
+                        <div class="stock-data">
+                            <span class="stock-price" id="price-RELIANCE">₹2,945.60</span>
+                            <span class="stock-change positive" id="change-RELIANCE">+0.65%</span>
+                        </div>
+                        <div class="stock-flash" id="flash-RELIANCE"></div>
+                    </div>
+                    <div class="live-stock-item" data-stock="WIPRO">
+                        <div class="stock-info">
+                            <span class="stock-symbol">WIPRO</span>
+                            <span class="stock-company">Wipro Limited</span>
+                        </div>
+                        <div class="stock-data">
+                            <span class="stock-price" id="price-WIPRO">₹542.30</span>
+                            <span class="stock-change positive" id="change-WIPRO">+1.01%</span>
+                        </div>
+                        <div class="stock-flash" id="flash-WIPRO"></div>
+                    </div>
+                </div>
+                <div class="market-mood">
+                    <span class="mood-label">Market Mood</span>
+                    <div class="mood-bar">
+                        <div class="mood-fill" id="mood-fill" style="width: 65%"></div>
+                    </div>
+                    <span class="mood-text" id="mood-text">Bullish 📈</span>
+                </div>
+            </div>
+
+            <!-- Twitch-Style Chat Feed -->
+            <div class="live-chat-panel">
+                <div class="chat-header">
+                    <span class="chat-title">🔴 Live News Stream</span>
+                    <div class="chat-controls">
+                        <button class="chat-btn" id="pause-feed">⏸️</button>
+                        <button class="chat-btn" id="clear-feed">🗑️</button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="news-chat">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                <div class="chat-footer">
+                    <div class="news-stats">
+                        <span class="stat-item"><span class="stat-icon bullish">📈</span> <span
+                                id="bullish-count">0</span></span>
+                        <span class="stat-item"><span class="stat-icon bearish">📉</span> <span
+                                id="bearish-count">0</span></span>
+                        <span class="stat-item"><span class="stat-icon neutral">➡️</span> <span
+                                id="neutral-count">0</span></span>
+                    </div>
+                    <span class="total-news" id="total-news">0 news today</span>
+                </div>
+            </div>
+
+            <!-- Sentiment Analysis -->
+            <div class="sentiment-panel">
+                <div class="panel-header">
+                    <span class="panel-title">🎯 AI Sentiment</span>
+                </div>
+                <div class="sentiment-meter">
+                    <div class="meter-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#EBEBEB" stroke-width="8" />
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#BFFF00" stroke-width="8"
+                                stroke-dasharray="251.2" stroke-dashoffset="87.92" id="sentiment-ring"
+                                transform="rotate(-90 50 50)" />
+                        </svg>
+                        <div class="meter-value">
+                            <span id="sentiment-value">65</span>
+                            <span class="meter-label">Score</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sentiment-breakdown">
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Positive</span>
+                        <div class="breakdown-bar">
+                            <div class="bar-fill green" id="positive-bar" style="width: 55%"></div>
+                        </div>
+                        <span class="breakdown-val" id="positive-pct">55%</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Negative</span>
+                        <div class="breakdown-bar">
+                            <div class="bar-fill red" id="negative-bar" style="width: 25%"></div>
+                        </div>
+                        <span class="breakdown-val" id="negative-pct">25%</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">Neutral</span>
+                        <div class="breakdown-bar">
+                            <div class="bar-fill gray" id="neutral-bar" style="width: 20%"></div>
+                        </div>
+                        <span class="breakdown-val" id="neutral-pct">20%</span>
+                    </div>
+                </div>
+                <div class="trending-now">
+                    <span class="trending-label">🔥 Trending</span>
+                    <div class="trending-tags" id="trending-tags">
+                        <span class="trend-tag active">RBI Policy</span>
+                        <span class="trend-tag">AI Deals</span>
+                        <span class="trend-tag">5G Rollout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stock Predictor Section -->
+    <section class="predictor-section" id="predictor">
+        <div class="section-header">
+            <h2 class="section-title">Stock Price Predictor <span class="badge-lstm">LSTM AI</span></h2>
+            <a href="#" class="view-link">VIEW ALL PREDICTIONS ↗</a>
+        </div>
+        <div class="predictor-grid">
+            <div class="config-card">
+                <h3 class="card-title">Configuration</h3>
+                <div class="form-group">
+                    <label>Select Stock</label>
+                    <select id="stock-select" class="form-select">
+                        <option value="SUBEX">SUBEX - Subex Limited</option>
+                        <option value="TCS">TCS - Tata Consultancy</option>
+                        <option value="INFY">INFY - Infosys</option>
+                        <option value="WIPRO">WIPRO - Wipro Limited</option>
+                        <option value="RELIANCE">RELIANCE - Reliance Industries</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Period</label>
+                        <select class="form-select">
+                            <option>1 Year</option>
+                            <option selected>2 Years</option>
+                            <option>5 Years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Predict Days</label>
+                        <input type="number" class="form-input" value="30">
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-secondary" id="fetch-btn">FETCH DATA</button>
+                    <button class="btn-cta" id="predict-btn">TRAIN & PREDICT</button>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-tabs">
+                        <button class="chart-tab active">1M</button>
+                        <button class="chart-tab">3M</button>
+                        <button class="chart-tab">6M</button>
+                        <button class="chart-tab">1Y</button>
+                        <button class="chart-tab">ALL</button>
+                    </div>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="dot blue"></span> Historical</span>
+                        <span class="legend-item"><span class="dot green"></span> Predicted</span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+            <div class="metrics-card">
+                <h3 class="card-title">Model Performance</h3>
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-ring">
+                            <svg viewBox="0 0 36 36">
+                                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f0f0f0" stroke-width="3" />
+                                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#BFFF00" stroke-width="3"
+                                    stroke-dasharray="92 100" transform="rotate(-90 18 18)" />
+                            </svg>
+                            <span class="metric-value">92%</span>
+                        </div>
+                        <span class="metric-label">Accuracy</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-big">₹4.23</span>
+                        <span class="metric-label">RMSE</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-big">₹3.18</span>
+                        <span class="metric-label">MAE</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-big">3.8%</span>
+                        <span class="metric-label">MAPE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="prediction-card">
+                <h3 class="card-title">30-Day Forecast</h3>
+                <div class="forecast-display">
+                    <div class="forecast-item">
+                        <span class="forecast-label">Current</span>
+                        <span class="forecast-value">₹87.45</span>
+                    </div>
+                    <div class="forecast-arrow">→</div>
+                    <div class="forecast-item">
+                        <span class="forecast-label">Predicted</span>
+                        <span class="forecast-value highlight">₹94.20</span>
+                    </div>
+                    <div class="forecast-badge positive">
+                        ↗ +7.72%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sales Forecasting Section -->
+    <section class="sales-section" id="sales">
+        <div class="section-header">
+            <h2 class="section-title">Sales Forecasting <span class="badge-gb">Gradient Boosting</span></h2>
+            <a href="#" class="view-link">VIEW ANALYTICS ↗</a>
+        </div>
+        <div class="sales-grid">
+            <div class="stats-row">
+                <div class="stat-box">
+                    <span class="stat-number">5,000</span>
+                    <span class="stat-text">Records</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">10</span>
+                    <span class="stat-text">Outlets</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">16</span>
+                    <span class="stat-text">Categories</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">₹2,847</span>
+                    <span class="stat-text">Avg Sales</span>
+                </div>
+                <div class="stat-box highlight-box">
+                    <span class="stat-number">0.94</span>
+                    <span class="stat-text">R² Score</span>
+                </div>
+            </div>
+            <div class="sales-chart-card">
+                <canvas id="salesChart"></canvas>
+            </div>
+            <div class="feature-card">
+                <h3 class="card-title">Feature Importance</h3>
+                <div class="feature-list">
+                    <div class="feature-row">
+                        <span class="feature-name">Item_MRP</span>
+                        <div class="feature-bar">
+                            <div class="bar-fill" style="width: 85%"></div>
+                        </div>
+                        <span class="feature-val">0.423</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-name">Outlet_Type</span>
+                        <div class="feature-bar">
+                            <div class="bar-fill" style="width: 62%"></div>
+                        </div>
+                        <span class="feature-val">0.287</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-name">Outlet_Age</span>
+                        <div class="feature-bar">
+                            <div class="bar-fill" style="width: 45%"></div>
+                        </div>
+                        <span class="feature-val">0.156</span>
+                    </div>
+                    <div class="feature-row">
+                        <span class="feature-name">Item_Visibility</span>
+                        <div class="feature-bar">
+                            <div class="bar-fill" style="width: 32%"></div>
+                        </div>
+                        <span class="feature-val">0.089</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Churn Analyzer Section -->
+    <section class="churn-section" id="churn">
+        <div class="section-header">
+            <h2 class="section-title">Customer Churn Analyzer <span class="badge-lr">Logistic Regression</span></h2>
+            <a href="#" class="view-link">VIEW INSIGHTS ↗</a>
+        </div>
+        <div class="churn-grid">
+            <div class="risk-overview">
+                <div class="risk-card high">
+                    <span class="risk-count">423</span>
+                    <span class="risk-label">High Risk</span>
+                    <span class="risk-percent">14.1%</span>
+                </div>
+                <div class="risk-card medium">
+                    <span class="risk-count">892</span>
+                    <span class="risk-label">Medium Risk</span>
+                    <span class="risk-percent">29.7%</span>
+                </div>
+                <div class="risk-card low">
+                    <span class="risk-count">1,685</span>
+                    <span class="risk-label">Low Risk</span>
+                    <span class="risk-percent">56.2%</span>
+                </div>
+            </div>
+            <div class="revenue-card">
+                <div class="revenue-header">Revenue at Risk</div>
+                <div class="revenue-amount">₹4,52,31,000</div>
+                <div class="revenue-bar">
+                    <div class="revenue-fill" style="width: 14%">14%</div>
+                </div>
+            </div>
+            <div class="customers-card">
+                <h3 class="card-title">High Risk Customers <span class="badge-count">Top 5</span></h3>
+                <div class="customer-list">
+                    <div class="customer-row">
+                        <div class="customer-info">
+                            <span class="customer-id">CUST001234</span>
+                            <span class="customer-city">Mumbai</span>
+                        </div>
+                        <div class="customer-risk">
+                            <div class="risk-bar">
+                                <div class="risk-fill" style="width: 89%"></div>
+                            </div>
+                            <span class="risk-val">89%</span>
+                        </div>
+                    </div>
+                    <div class="customer-row">
+                        <div class="customer-info">
+                            <span class="customer-id">CUST002567</span>
+                            <span class="customer-city">Delhi</span>
+                        </div>
+                        <div class="customer-risk">
+                            <div class="risk-bar">
+                                <div class="risk-fill" style="width: 85%"></div>
+                            </div>
+                            <span class="risk-val">85%</span>
+                        </div>
+                    </div>
+                    <div class="customer-row">
+                        <div class="customer-info">
+                            <span class="customer-id">CUST003891</span>
+                            <span class="customer-city">Bangalore</span>
+                        </div>
+                        <div class="customer-risk">
+                            <div class="risk-bar">
+                                <div class="risk-fill" style="width: 82%"></div>
+                            </div>
+                            <span class="risk-val">82%</span>
+                        </div>
+                    </div>
+                    <div class="customer-row">
+                        <div class="customer-info">
+                            <span class="customer-id">CUST004102</span>
+                            <span class="customer-city">Chennai</span>
+                        </div>
+                        <div class="customer-risk">
+                            <div class="risk-bar">
+                                <div class="risk-fill" style="width: 78%"></div>
+                            </div>
+                            <span class="risk-val">78%</span>
+                        </div>
+                    </div>
+                    <div class="customer-row">
+                        <div class="customer-info">
+                            <span class="customer-id">CUST005438</span>
+                            <span class="customer-city">Hyderabad</span>
+                        </div>
+                        <div class="customer-risk">
+                            <div class="risk-bar">
+                                <div class="risk-fill" style="width: 74%"></div>
+                            </div>
+                            <span class="risk-val">74%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="churn-metrics">
+                <div class="churn-metric">
+                    <span class="metric-num">87.3%</span>
+                    <span class="metric-name">Accuracy</span>
+                </div>
+                <div class="churn-metric">
+                    <span class="metric-num">84.1%</span>
+                    <span class="metric-name">Precision</span>
+                </div>
+                <div class="churn-metric">
+                    <span class="metric-num">79.6%</span>
+                    <span class="metric-name">Recall</span>
+                </div>
+                <div class="churn-metric">
+                    <span class="metric-num">0.91</span>
+                    <span class="metric-name">ROC-AUC</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="8" height="30" x="2" y="5" fill="#000" />
+                    <rect width="8" height="20" x="16" y="15" fill="#000" />
+                    <rect width="8" height="25" x="30" y="10" fill="#000" />
+                </svg>
+                <span>ML Analytics Suite</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-copy">© 2026 ML Analytics Suite. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loading">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <span class="loader-text">Training Model...</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
