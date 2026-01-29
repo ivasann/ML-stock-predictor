@@ -71,7 +71,9 @@ class StockPredictor:
             
             return self.data
         except Exception as e:
-            print(f"Error fetching data: {e}")
+            print(f"Error fetching data for {self.ticker}: {e}")
+            if "delisted" in str(e).lower():
+                print(f"Suggestion: {self.symbol} might be delisted. Try a more common symbol like RELIANCE or TCS.")
             # Return sample data for demo
             return self._generate_sample_data()
     
@@ -290,17 +292,31 @@ class StockPredictor:
             'mape': mape
         }
     
-    def save_model(self, path: str = 'models/stock_model.h5'):
+    def save_model(self, path: Optional[str] = None):
         """Save trained model to disk."""
         if self.model is not None:
+            if path is None:
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                path = os.path.join(base_dir, 'models', f'{self.symbol.lower()}_model.keras')
+            
+            os.makedirs(os.path.dirname(path), exist_ok=True)
             self.model.save(path)
-            joblib.dump(self.scaler, path.replace('.h5', '_scaler.pkl'))
+            joblib.dump(self.scaler, path.replace('.keras', '_scaler.pkl'))
+            print(f"Model saved to {path}")
     
-    def load_model(self, path: str = 'models/stock_model.h5'):
+    def load_model(self, path: Optional[str] = None):
         """Load trained model from disk."""
         from tensorflow.keras.models import load_model
-        self.model = load_model(path)
-        self.scaler = joblib.load(path.replace('.h5', '_scaler.pkl'))
+        if path is None:
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            path = os.path.join(base_dir, 'models', f'{self.symbol.lower()}_model.keras')
+            
+        if os.path.exists(path):
+            self.model = load_model(path)
+            self.scaler = joblib.load(path.replace('.keras', '_scaler.pkl'))
+            print(f"Model loaded from {path}")
+        else:
+            raise FileNotFoundError(f"No model found at {path}")
     
     def get_stock_info(self) -> Dict:
         """Get current stock information."""

@@ -169,29 +169,51 @@ class MLAnalyticsSuite(ctk.CTk):
             command=self._fetch_stock_data,
             fg_color=COLORS['secondary'],
             hover_color="#2E7D32",
-            width=120
+            width=110
         )
-        fetch_btn.grid(row=0, column=6, padx=10, pady=15)
+        fetch_btn.grid(row=0, column=6, padx=5, pady=15)
         
         train_btn = ctk.CTkButton(
             controls_frame,
             text="🧠 Train & Predict",
             command=self._train_stock_model,
             fg_color=COLORS['primary'],
-            width=140
+            width=130
         )
-        train_btn.grid(row=0, column=7, padx=10, pady=15)
+        train_btn.grid(row=0, column=7, padx=5, pady=15)
+
+        # Indicator Selector
+        indicator_frame = ctk.CTkFrame(self.tab_stock, fg_color=COLORS['card'])
+        indicator_frame.grid(row=1, column=0, sticky="ew", padx=10, pady=(0, 10))
+        
+        ctk.CTkLabel(indicator_frame, text="Overlays:", font=ctk.CTkFont(size=11, weight="bold")).grid(row=0, column=0, padx=10, pady=5)
+        self.show_ma_var = ctk.BooleanVar(value=True)
+        ctk.CTkCheckBox(indicator_frame, text="Moving Averages", variable=self.show_ma_var, font=ctk.CTkFont(size=11), command=self._update_stock_plots).grid(row=0, column=1, padx=10)
+        self.show_bb_var = ctk.BooleanVar(value=False)
+        ctk.CTkCheckBox(indicator_frame, text="Bollinger Bands", variable=self.show_bb_var, font=ctk.CTkFont(size=11), command=self._update_stock_plots).grid(row=0, column=2, padx=10)
+        
+        ctk.CTkLabel(indicator_frame, text="Indicators:", font=ctk.CTkFont(size=11, weight="bold")).grid(row=0, column=3, padx=10, pady=5)
+        self.indicator_var = ctk.StringVar(value="None")
+        indicator_menu = ctk.CTkOptionMenu(
+            indicator_frame,
+            variable=self.indicator_var,
+            values=["None", "RSI", "MACD", "Stochastic"],
+            width=100,
+            font=ctk.CTkFont(size=11),
+            command=lambda _: self._update_stock_plots()
+        )
+        indicator_menu.grid(row=0, column=4, padx=10, pady=5)
         
         # Results area
         results_frame = ctk.CTkFrame(self.tab_stock, fg_color=COLORS['card'])
-        results_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=(0, 10))
-        results_frame.grid_columnconfigure(0, weight=3)
+        results_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=(0, 10))
+        results_frame.grid_columnconfigure(0, weight=4)
         results_frame.grid_columnconfigure(1, weight=1)
         results_frame.grid_rowconfigure(0, weight=1)
         
         # Chart area
-        self.stock_chart_frame = ctk.CTkFrame(results_frame, fg_color=COLORS['background'])
-        self.stock_chart_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.stock_chart_container = ctk.CTkFrame(results_frame, fg_color=COLORS['background'])
+        self.stock_chart_container.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         
         # Stats panel
         self.stock_stats_frame = ctk.CTkFrame(results_frame, fg_color=COLORS['card'])
@@ -202,9 +224,9 @@ class MLAnalyticsSuite(ctk.CTk):
     def _create_stock_placeholder(self):
         """Create placeholder for stock chart."""
         placeholder = ctk.CTkLabel(
-            self.stock_chart_frame,
+            self.stock_chart_container,
             text="📈 Select a stock and click 'Fetch Data' to begin\n\n"
-                 "Supported stocks: SUBEX, TCS, INFOSYS, WIPRO, RELIANCE, HDFC, ICICI",
+                 "Supported stocks: RELIANCE, TCS, INFY, HDFC BANK, SBI, ADANI...",
             font=ctk.CTkFont(size=14),
             text_color="#666666"
         )
@@ -400,12 +422,7 @@ class MLAnalyticsSuite(ctk.CTk):
             self._clear_frame(self.stock_stats_frame)
             
             # Display chart
-            setup_dark_style()
-            fig = create_stock_chart(
-                data.index, data['Close'].values,
-                title=f"{self.stock_var.get()} - Historical Prices"
-            )
-            self._embed_chart(fig, self.stock_chart_frame)
+            self._update_stock_plots()
             
             # Display stats
             self._show_stock_stats(data)
@@ -484,33 +501,46 @@ class MLAnalyticsSuite(ctk.CTk):
                 
         threading.Thread(target=train_thread, daemon=True).start()
         
+    def _update_stock_plots(self, predictions=None, predicted_dates=None):
+        """Update stock charts with selected overlays and indicators."""
+        if self.stock_predictor is None or self.stock_predictor.data is None:
+            return
+            
+        data = self.stock_predictor.data
+        self._clear_frame(self.stock_chart_container)
+        
+        # Determine indicators to overlay
+        overlays = []
+        if self.show_ma_var.get(): overlays.append('Moving Averages')
+        if self.show_bb_var.get(): overlays.append('Bollinger Bands')
+        
+        # Main Price Chart
+        setup_dark_style()
+        main_fig = create_stock_chart(
+            data, 
+            predicted_dates=predicted_dates,
+            predicted_prices=predictions,
+            indicators=overlays,
+            title=f"{self.stock_var.get()} - Price Analysis"
+        )
+        self._embed_chart(main_fig, self.stock_chart_container)
+        
+        # Indicator Chart (if selected)
+        selected_ind = self.indicator_var.get()
+        if selected_ind != "None":
+            ind_fig = create_indicators_chart(
+                data,
+                indicator=selected_ind,
+                title=f"{selected_ind} Indicator"
+            )
+            self._embed_chart(ind_fig, self.stock_chart_container)
+
     def _display_stock_predictions(self, predictions, future_dates, metrics):
         """Display stock predictions."""
-        self._clear_frame(self.stock_chart_frame)
         self._clear_frame(self.stock_stats_frame)
         
-        # Create combined chart
-        setup_dark_style()
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        # Historical data
-        data = self.stock_predictor.data
-        ax.plot(data.index[-100:], data['Close'].iloc[-100:], 
-                label='Historical', color='#1E88E5', linewidth=2)
-        
-        # Predictions
-        ax.plot(future_dates, predictions, 
-                label='Predicted', color='#43A047', linewidth=2, linestyle='--')
-        
-        ax.set_title(f"{self.stock_var.get()} - Price Prediction", fontsize=14, fontweight='bold')
-        ax.set_xlabel('Date')
-        ax.set_ylabel('Price (₹)')
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        
-        self._embed_chart(fig, self.stock_chart_frame)
+        # Update charts using the unified update method
+        self._update_stock_plots(predictions=predictions, predicted_dates=future_dates)
         
         # Show metrics
         stats = [

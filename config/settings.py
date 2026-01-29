@@ -2,14 +2,16 @@
 
 # Stock Predictor Settings
 STOCK_SYMBOLS = {
-    'SUBEX': 'SUBEX.NS',
+    'RELIANCE': 'RELIANCE.NS',
     'TCS': 'TCS.NS',
     'INFOSYS': 'INFY.NS',
     'WIPRO': 'WIPRO.NS',
-    'RELIANCE': 'RELIANCE.NS',
-    'HDFC': 'HDFCBANK.NS',
-    'ICICI': 'ICICIBANK.NS',
+    'HDFC BANK': 'HDFCBANK.NS',
+    'ICICI BANK': 'ICICIBANK.NS',
+    'SBI': 'SBIN.NS',
     'BHARTI': 'BHARTIARTL.NS',
+    'ADANI': 'ADANIPORTS.NS',
+    'TATA MOTORS': 'TATAMOTORS.NS',
 }
 
 LSTM_CONFIG = {

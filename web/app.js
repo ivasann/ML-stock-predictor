@@ -86,58 +86,70 @@ function initMainChart() {
     });
 }
 
-function initSalesChart() {
+async function initSalesChart() {
     const ctx = document.getElementById('salesChart');
     if (!ctx) return;
 
-    salesChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Food', 'Drinks', 'Non-Consumable'],
-            datasets: [
-                {
-                    label: 'Actual',
-                    data: [4520000, 1280000, 2340000],
-                    backgroundColor: '#BFFF00',
-                    borderRadius: 6,
-                },
-                {
-                    label: 'Predicted',
-                    data: [4680000, 1350000, 2420000],
-                    backgroundColor: '#22C55E',
-                    borderRadius: 6,
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: { color: '#737373', font: { family: 'Space Grotesk', size: 12 }, usePointStyle: true }
-                },
-                tooltip: {
-                    backgroundColor: '#000',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    padding: 12,
-                    cornerRadius: 8,
-                    callbacks: {
-                        label: (ctx) => `${ctx.dataset.label}: ₹${(ctx.raw / 100000).toFixed(1)}L`
+    try {
+        const response = await fetch('/api/predict/sales');
+        const apiData = await response.json();
+
+        const labels = apiData.forecast.map(i => i.Item_Category);
+        const actuals = apiData.forecast.map(i => i.Total_Actual);
+        const predicteds = apiData.forecast.map(i => i.Total_Predicted);
+
+        salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Actual',
+                        data: actuals,
+                        backgroundColor: '#BFFF00',
+                        borderRadius: 6,
+                    },
+                    {
+                        label: 'Predicted',
+                        data: predicteds,
+                        backgroundColor: '#22C55E',
+                        borderRadius: 6,
                     }
-                }
+                ]
             },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: '#737373', font: { family: 'Space Grotesk' } } },
-                y: {
-                    grid: { color: '#EBEBEB' },
-                    ticks: { color: '#737373', font: { family: 'Space Grotesk' }, callback: v => `₹${(v / 100000).toFixed(0)}L` }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { color: '#737373', font: { family: 'Space Grotesk', size: 12 }, usePointStyle: true }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { color: '#EBEBEB' } }
                 }
             }
+        });
+
+        // Update features
+        const featureList = document.querySelector('.feature-list');
+        if (featureList && apiData.importance) {
+            featureList.innerHTML = apiData.importance.map(f => `
+                <div class="feature-row">
+                    <span class="feature-name">${f.Feature}</span>
+                    <div class="feature-bar">
+                        <div class="bar-fill" style="width: ${f.Importance * 100}%"></div>
+                    </div>
+                    <span class="feature-val">${f.Importance.toFixed(3)}</span>
+                </div>
+            `).join('');
         }
-    });
+    } catch (e) {
+        console.error('Sales chart error:', e);
+    }
 }
 
 // ========== DATA GENERATORS ==========
@@ -175,13 +187,27 @@ function initEventListeners() {
     });
 
     // Predict button
-    document.getElementById('predict-btn')?.addEventListener('click', () => {
-        showLoading('Training LSTM model...');
-        setTimeout(() => {
-            updatePrediction();
+    document.getElementById('predict-btn')?.addEventListener('click', async () => {
+        const symbol = document.getElementById('stock-select').value;
+        showLoading(`Training LSTM model for ${symbol}...`);
+        try {
+            const response = await fetch('/api/predict/stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ symbol: symbol, period: '2y', predict_days: 30 })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                updatePrediction(data);
+                hideLoading();
+                showNotification(`Prediction complete! ${data.metrics.rmse.toFixed(2)} RMSE`);
+            } else {
+                throw new Error(data.detail || 'Failed to predict');
+            }
+        } catch (error) {
             hideLoading();
-            showNotification('Prediction complete! +7.72% expected');
-        }, 2500);
+            showNotification(`Error: ${error.message}`);
+        }
     });
 
     // Chart tabs
@@ -196,12 +222,36 @@ function initEventListeners() {
     document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const target = document.querySelector(link.getAttribute('href'));
+            const targetId = link.getAttribute('href');
+            if (targetId === '#churn') triggerChurnAnalysis();
+            const target = document.querySelector(targetId);
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
+}
+
+async function triggerChurnAnalysis() {
+    try {
+        const response = await fetch('/api/predict/churn');
+        const data = await response.json();
+        if (response.ok) {
+            updateChurnUI(data);
+        }
+    } catch (e) { console.error('Churn error:', e); }
+}
+
+function updateChurnUI(data) {
+    const summary = data.summary;
+    const cards = document.querySelectorAll('.risk-card');
+    if (cards.length >= 3) {
+        cards[0].querySelector('.risk-count').textContent = summary.high_risk_count;
+        cards[1].querySelector('.risk-count').textContent = summary.medium_risk_count;
+        cards[2].querySelector('.risk-count').textContent = summary.low_risk_count;
+    }
+    const revAmount = document.querySelector('.revenue-amount');
+    if (revAmount) revAmount.textContent = `₹${summary.estimated_revenue_at_risk.toLocaleString('en-IN')}`;
 }
 
 // ========== STOCK CARDS ==========
@@ -216,29 +266,34 @@ function initStockCards() {
 }
 
 // ========== PREDICTIONS ==========
-function updatePrediction() {
-    const current = 87.45;
-    const predicted = current * (1 + (Math.random() * 0.1 + 0.02));
-    const change = ((predicted / current) - 1) * 100;
+function updatePrediction(apiData) {
+    if (!apiData) return;
+
+    const historical = apiData.historical;
+    const predicted = apiData.predicted;
+    const labels = [...apiData.historical_dates, ...apiData.predicted_dates];
+
+    const current = historical[historical.length - 1];
+    const target = predicted[predicted.length - 1];
+    const change = ((target / current) - 1) * 100;
 
     // Update forecast display
     const forecastValue = document.querySelector('.forecast-value.highlight');
     if (forecastValue) {
-        forecastValue.textContent = `₹${predicted.toFixed(2)}`;
+        forecastValue.textContent = `₹${target.toFixed(2)}`;
     }
 
     const badge = document.querySelector('.forecast-badge');
     if (badge) {
-        badge.textContent = `↗ +${change.toFixed(2)}%`;
-        badge.className = 'forecast-badge positive';
+        badge.textContent = `${change >= 0 ? '↗' : '↘'} ${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+        badge.className = `forecast-badge ${change >= 0 ? 'positive' : 'negative'}`;
     }
 
     // Update chart
     if (mainChart) {
-        const historical = generateStockData(45, 75, 92);
-        const predicted = generateStockData(15, 88, 102);
-        mainChart.data.datasets[0].data = [...historical, ...Array(15).fill(null)];
-        mainChart.data.datasets[1].data = [...Array(44).fill(null), historical[44], ...predicted];
+        mainChart.data.labels = labels;
+        mainChart.data.datasets[0].data = [...historical, ...Array(predicted.length).fill(null)];
+        mainChart.data.datasets[1].data = [...Array(historical.length - 1).fill(null), historical[historical.length - 1], ...predicted];
         mainChart.update();
     }
 }
@@ -437,8 +492,8 @@ function initLiveFeed() {
 
     // Start news stream
     setInterval(() => {
-        if (!isPaused) postRandomNews();
-    }, 4000 + Math.random() * 4000);
+        if (!isPaused) fetchSocialNews();
+    }, 5000 + Math.random() * 5000);
 
     // Periodic price fluctuations
     setInterval(() => {
@@ -446,8 +501,23 @@ function initLiveFeed() {
     }, 3000);
 
     // Initial news
-    postRandomNews();
-    setTimeout(postRandomNews, 1500);
+    fetchSocialNews();
+}
+
+async function fetchSocialNews() {
+    try {
+        const response = await fetch('/api/news/social');
+        const newsItems = await response.json();
+        newsItems.forEach(item => {
+            addChatMessage(item);
+            updateSentiment(item.sentiment);
+            item.stocks.forEach(stock => updateStockPrice(stock, item.impact));
+        });
+    } catch (e) {
+        console.error('Social news error:', e);
+        // Fallback to local random news if API fails
+        postRandomNews();
+    }
 }
 
 function postRandomNews() {
@@ -472,19 +542,36 @@ function addChatMessage(event) {
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const sentimentEmoji = event.sentiment === 'bullish' ? '📈' : (event.sentiment === 'bearish' ? '📉' : '➡️');
 
-    const stocksHtml = event.stocks.map(s => {
-        const isUp = event.sentiment === 'bullish' || (event.sentiment === 'neutral' && Math.random() > 0.5);
+    // Social specific parts
+    const isSocial = event.platform !== 'reuters' && event.platform !== 'et' && event.platform !== 'cnbc' && event.platform !== 'bloomberg' && event.platform !== 'moneycontrol';
+    const sourceLabel = event.platform || event.source;
+    const verifiedBadge = event.verified ? '<span class="msg-verified">✓</span>' : '';
+    const handleLabel = event.handle ? `<span class="msg-handle">${event.handle}</span>` : '';
+
+    const stocksHtml = event.stocks?.map(s => {
+        const isUp = event.sentiment === 'bullish';
         return `<span class="msg-stock-tag ${isUp ? 'up' : 'down'}">${s} ${isUp ? '+' : ''}${event.impact}%</span>`;
-    }).join('');
+    }).join('') || '';
+
+    const engagementHtml = event.engagement ? `
+        <div class="msg-engagement">
+            <span class="eng-item">❤️ ${event.engagement.likes}</span>
+            <span class="eng-item">🔁 ${event.engagement.reposts}</span>
+        </div>
+    ` : '';
 
     msg.innerHTML = `
         <div class="msg-header">
-            <span class="msg-source ${event.source}">${event.source}</span>
+            <span class="msg-source ${sourceLabel}">${sourceLabel.toUpperCase()}</span>
+            <span class="msg-user">${event.user || ''}</span>
+            ${verifiedBadge}
+            ${handleLabel}
             <span class="msg-time">${time}</span>
             <span class="msg-sentiment">${sentimentEmoji}</span>
         </div>
         <p class="msg-text">${event.text}</p>
         <div class="msg-stocks">${stocksHtml}</div>
+        ${engagementHtml}
     `;
 
     chat.appendChild(msg);

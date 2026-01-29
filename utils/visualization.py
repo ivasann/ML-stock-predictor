@@ -29,43 +29,99 @@ def setup_dark_style():
 
 
 def create_stock_chart(
-    dates: pd.DatetimeIndex,
-    actual: np.ndarray,
-    predicted: Optional[np.ndarray] = None,
+    df: pd.DataFrame,
+    predicted_dates: Optional[List] = None,
+    predicted_prices: Optional[np.ndarray] = None,
+    indicators: Optional[List[str]] = None,
     title: str = "Stock Price Prediction",
     figsize: Tuple[int, int] = (12, 6)
 ) -> Figure:
     """
-    Create stock price chart with actual vs predicted values.
+    Create stock price chart with actual, predicted values and indicators.
     
     Args:
-        dates: Date index
-        actual: Actual prices
-        predicted: Predicted prices (optional)
+        df: DataFrame with at least Date and Close columns
+        predicted_dates: List of future dates (optional)
+        predicted_prices: array of predicted prices (optional)
+        indicators: List of indicators to overlay ('MA_7', 'BB', etc.)
         title: Chart title
         figsize: Figure dimensions
-        
-    Returns:
-        Matplotlib Figure
     """
     setup_dark_style()
     fig, ax = plt.subplots(figsize=figsize)
     
-    ax.plot(dates, actual, label='Actual', color='#1E88E5', linewidth=2)
+    # Plot actual price
+    ax.plot(df.index, df['Close'], label='Actual Price', color='#1E88E5', linewidth=2)
     
-    if predicted is not None:
-        ax.plot(dates[-len(predicted):], predicted, 
-                label='Predicted', color='#43A047', linewidth=2, linestyle='--')
+    # Plot overlays
+    if indicators:
+        if 'MA' in indicators or 'Moving Averages' in indicators:
+            if 'MA_7' in df.columns: ax.plot(df.index, df['MA_7'], label='MA 7', alpha=0.7, linestyle='--')
+            if 'MA_21' in df.columns: ax.plot(df.index, df['MA_21'], label='MA 21', alpha=0.7, linestyle='--')
+            if 'MA_50' in df.columns: ax.plot(df.index, df['MA_50'], label='MA 50', alpha=0.7, linestyle='--')
+        
+        if 'BB' in indicators or 'Bollinger Bands' in indicators:
+            if 'BB_Upper' in df.columns and 'BB_Lower' in df.columns:
+                ax.fill_between(df.index, df['BB_Upper'], df['BB_Lower'], color='gray', alpha=0.1, label='Bollinger Bands')
+                ax.plot(df.index, df['BB_Upper'], color='gray', alpha=0.3, linewidth=1)
+                ax.plot(df.index, df['BB_Lower'], color='gray', alpha=0.3, linewidth=1)
+
+    # Plot predictions
+    if predicted_dates is not None and predicted_prices is not None:
+        ax.plot(predicted_dates, predicted_prices, 
+                label='Predicted Price', color='#43A047', linewidth=2, linestyle='--')
     
     ax.set_title(title, fontsize=14, fontweight='bold', pad=15)
     ax.set_xlabel('Date', fontsize=11)
     ax.set_ylabel('Price (₹)', fontsize=11)
-    ax.legend(loc='upper left', fontsize=10)
-    ax.grid(True, alpha=0.3)
+    ax.legend(loc='best', fontsize=9)
+    ax.grid(True, alpha=0.2)
     
-    # Format x-axis dates
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-    ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    plt.xticks(rotation=45)
+    
+    plt.tight_layout()
+    return fig
+
+
+def create_indicators_chart(
+    df: pd.DataFrame,
+    indicator: str = 'RSI',
+    title: str = "Technical Indicator",
+    figsize: Tuple[int, int] = (12, 4)
+) -> Figure:
+    """Create a chart for a specific technical indicator."""
+    setup_dark_style()
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    if indicator == 'RSI' and 'RSI' in df.columns:
+        ax.plot(df.index, df['RSI'], color='#FB8C00', linewidth=1.5)
+        ax.axhline(70, color='#E53935', linestyle='--', alpha=0.5)
+        ax.axhline(30, color='#43A047', linestyle='--', alpha=0.5)
+        ax.set_ylim(0, 100)
+        ax.set_ylabel('RSI')
+    
+    elif indicator == 'MACD' and 'MACD' in df.columns:
+        ax.plot(df.index, df['MACD'], label='MACD', color='#1E88E5')
+        ax.plot(df.index, df['MACD_Signal'], label='Signal', color='#FB8C00')
+        # Histogram
+        hist = df['MACD'] - df['MACD_Signal']
+        ax.bar(df.index, hist, label='Hist', color=['#43A047' if x > 0 else '#E53935' for x in hist], alpha=0.5)
+        ax.legend(loc='best', fontsize=8)
+        ax.set_ylabel('MACD')
+
+    elif indicator == 'Stochastic' and 'Stochastic_K' in df.columns:
+        ax.plot(df.index, df['Stochastic_K'], label='%K', color='#1E88E5')
+        ax.plot(df.index, df['Stochastic_D'], label='%D', color='#FB8C00')
+        ax.axhline(80, color='#E53935', linestyle='--', alpha=0.5)
+        ax.axhline(20, color='#43A047', linestyle='--', alpha=0.5)
+        ax.set_ylim(0, 100)
+        ax.legend(loc='best', fontsize=8)
+        ax.set_ylabel('Stochastic')
+        
+    ax.set_title(title, fontsize=12, fontweight='bold')
+    ax.grid(True, alpha=0.2)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.xticks(rotation=45)
     
     plt.tight_layout()

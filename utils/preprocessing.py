@@ -131,6 +131,10 @@ def add_technical_indicators(df: pd.DataFrame, close_col: str = 'Close') -> pd.D
     df_ind['MA_21'] = close.rolling(window=21).mean()
     df_ind['MA_50'] = close.rolling(window=50).mean()
     
+    # EMA
+    df_ind['EMA_12'] = close.ewm(span=12, adjust=False).mean()
+    df_ind['EMA_26'] = close.ewm(span=26, adjust=False).mean()
+    
     # RSI (14-day)
     delta = close.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
@@ -139,9 +143,7 @@ def add_technical_indicators(df: pd.DataFrame, close_col: str = 'Close') -> pd.D
     df_ind['RSI'] = 100 - (100 / (1 + rs))
     
     # MACD
-    exp1 = close.ewm(span=12, adjust=False).mean()
-    exp2 = close.ewm(span=26, adjust=False).mean()
-    df_ind['MACD'] = exp1 - exp2
+    df_ind['MACD'] = df_ind['EMA_12'] - df_ind['EMA_26']
     df_ind['MACD_Signal'] = df_ind['MACD'].ewm(span=9, adjust=False).mean()
     
     # Bollinger Bands
@@ -149,6 +151,22 @@ def add_technical_indicators(df: pd.DataFrame, close_col: str = 'Close') -> pd.D
     bb_std = close.rolling(window=20).std()
     df_ind['BB_Upper'] = df_ind['BB_Middle'] + (bb_std * 2)
     df_ind['BB_Lower'] = df_ind['BB_Middle'] - (bb_std * 2)
+    
+    # ATR (Average True Range)
+    high = df_ind['High']
+    low = df_ind['Low']
+    tr = pd.concat([
+        high - low,
+        (high - close.shift()).abs(),
+        (low - close.shift()).abs()
+    ], axis=1).max(axis=1)
+    df_ind['ATR'] = tr.rolling(window=14).mean()
+    
+    # Stochastic Oscillator
+    low_14 = low.rolling(window=14).min()
+    high_14 = high.rolling(window=14).max()
+    df_ind['Stochastic_K'] = (close - low_14) * 100 / (high_14 - low_14)
+    df_ind['Stochastic_D'] = df_ind['Stochastic_K'].rolling(window=3).mean()
     
     # Volume Moving Average (if Volume exists)
     if 'Volume' in df_ind.columns:
